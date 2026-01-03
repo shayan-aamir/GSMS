@@ -156,62 +156,6 @@ http://localhost:5000
 
 4. You will be redirected to the login page. Use the registration endpoint or create a user directly in the database to log in.
 
-## Deployment on Vercel
-
-This application can be deployed on Vercel as a serverless function. The project includes the necessary configuration files.
-
-### Prerequisites for Vercel Deployment
-
-1. A Vercel account ([Sign up here](https://vercel.com))
-2. A MySQL database (consider using services like [PlanetScale](https://planetscale.com), [Railway](https://railway.app), or [AWS RDS](https://aws.amazon.com/rds/))
-3. Vercel CLI (optional, for local testing): `npm i -g vercel`
-
-### Deployment Steps
-
-1. **Push your code to GitHub** (if not already done)
-
-2. **Import your project to Vercel**:
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "Add New" → "Project"
-   - Import your GitHub repository
-
-3. **Configure Environment Variables** in Vercel:
-   - Go to Project Settings → Environment Variables
-   - Add the following variables:
-     ```
-     DB_USER=your_database_username
-     DB_PASSWORD=your_database_password
-     DB_NAME=grocery_store
-     DB_HOST=your_database_host
-     DB_PORT=3306
-     SECRET_KEY=your_secure_random_secret_key
-     ```
-
-4. **Deploy**:
-   - Vercel will automatically detect the Flask app from `api/index.py`
-   - The deployment will use the `vercel.json` configuration
-   - After deployment, your app will be available at `https://your-project.vercel.app`
-
-### Important Notes for Vercel
-
-- **Database Connection**: Ensure your MySQL database allows connections from Vercel's IP addresses. You may need to whitelist all IPs or use a database service that supports serverless connections.
-- **Cold Starts**: Serverless functions may experience cold starts. Consider using Vercel Pro for better performance.
-- **File Paths**: The static file serving has been updated to work with Vercel's serverless environment.
-- **Session Storage**: Flask sessions use server-side storage by default. For production, consider using Redis or database-backed sessions.
-
-### Local Testing with Vercel CLI
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy to preview
-vercel
-
-# Deploy to production
-vercel --prod
-```
-
 ## API Endpoints
 
 ### Authentication
@@ -327,4 +271,5 @@ This project is part of a Bachelor's degree coursework. Please check with the pr
 ---
 
 **Note**: This is an educational project. For production use, additional security measures and optimizations are recommended.
+
 
