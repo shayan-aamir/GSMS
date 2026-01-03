@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title> GSMS - Manage Finances </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="csrf-token" content="kmapods5wQ5L1hn7rcR9OPst7EsN0gC7SrHh3m9K"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,600,700">
+    <link media="all" type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+    <link media="all" type="text/css" rel="stylesheet" href="css/style.css?v=1.0">
+    <link media="all" type="text/css" rel="stylesheet" href="css/sidebar-menu.css?v=1.0">
+    <link media="all" type="text/css" rel="stylesheet" href="css/custom.css?v=1.3.3">
+</head>
+<body class="tooltips">
+<div class="container">
+
+    <div class="header content rows-content-header">
+        <button class="button-menu-mobile show-sidebar">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav visible-lg visible-md limit-chars">
+                        <ul class="breadcrumb">
+                            <a href="index.html">
+                                <i class="zmdi zmdi-view-dashboard zmdi-hc-fw" title="Dashboard"></i>
+                            </a>
+                            <a href="manage-product.html">
+                                <i class="zmdi zmdi-assignment zmdi-hc-fw" title="Products"></i>
+                            </a>
+                            <a href="order.html">
+                                <i class="zmdi zmdi-shopping-cart zmdi-hc-fw" title="Orders"></i>
+                            </a>
+                        </ul>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span id="userInfo" class="navbar-text" style="margin-right: 15px;"></span></li>
+                        <li><button id="logoutBtn" class="btn btn-sm btn-default" style="margin-top: 8px;">Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right content-page">
+        <div class="body content rows scroll-y">
+            <div class="box-info full" id="taskFormContainer">
+                <h2>Manage Finances</h2>
+                <div class="panel-body pt-0">
+                    <div class="row mb-4">
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#financeModal">
+                                Add New Finance Record
+                            </button>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                        <th>Payment ID</th>
+                        <th>Total Price</th>
+                        <th>Payment Type</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th style="width: 150px">Action</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade-scale" id="financeModal" role="dialog" data-backdrop="static">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Finance Record</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="financeForm">
+                        <input type="hidden" name="payment_id" id="payment_id" value="0">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Total Price</label>
+                                    <input class="form-control" placeholder="Total Price" name="total_price" id="total_price" type="text" value="" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Payment Type</label>
+                                    <select class="form-control" name="payment_type" id="payment_type" required>
+                                        <option value="">--Select--</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Debit Card">Debit Card</option>
+                                        <option value="Online Payment">Online Payment</option>
+                                        <option value="Check">Check</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input class="form-control" placeholder="Date (YYYY-MM-DD)" name="date" id="date" type="date" value="" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Customer (Optional)</label>
+                                    <select class="form-control" name="Customer_id" id="Customer_id">
+                                        <option value="">--Select Customer (Optional)--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveFinance">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/packages/jquery.min.js"></script>
+<script src="js/packages/bootstrap.min.js"></script>
+<script src="js/custom/auth.js"></script>
+<script src="js/custom/common.js"></script>
+<script src="js/custom/manage-finance.js"></script>
+<script>
+    // Check authentication on page load
+    $(document).ready(function() {
+        Auth.requireAuth().then(function(isAuth) {
+            if (isAuth) {
+                fetch('/current_user', {credentials: 'include'})
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.user) {
+                            $('#userInfo').text('Logged in as: ' + data.user + (data.role ? ' (' + data.role + ')' : ''));
+                        }
+                    });
+                $('#logoutBtn').on('click', async function() {
+                    await Auth.logout();
+                    window.location.href = 'login.html';
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
